@@ -12,7 +12,7 @@ interface WeatherData {
   }[];
 }
 
-const api = "f36705b128aea29a56989abd4ad8382e";
+const api = process.env.EXPO_PUBLIC_WEATHER_KEY;
 
 export async function showWeather(city: string){
   if(city){
@@ -50,7 +50,8 @@ function displayWeather(data: WeatherData){
     weather: [{description, id}],
   } = data;
 
-  alert("City:" + city + ", Temp: " + convertoFahrenheit(temp) + "°F, Humidity: " + humidity + ", Description: " + description + ",  Id: " + id)
+  alert("City:" + city + ", Temp: " + convertoFahrenheit(temp) + "°F, Humidity: " + humidity + ", Description: " + description + ",  Id: " + id);
+
 }
 
 function convertKelvinToCelcius(temperatureK: number){

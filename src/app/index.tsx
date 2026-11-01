@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Pressable, Text, TextInput, View } from "react-native";
 import { styles } from "@/styles";
 import { showWeather } from "@/weather";
+import { router } from "expo-router";
 
 
 export default function Index() {
@@ -16,8 +17,11 @@ export default function Index() {
       onChangeText={(newValue => setText(newValue))}
       />
 
-      <Pressable style={styles.button} onPress={() => showWeather(text)}>
-        <Text style = {styles.buttonText}>Learn More</Text>
+      <Pressable style={styles.button} onPress={() => {
+        showWeather(text); 
+        router.push({ pathname: "/weatherInfo" as any, params: { city: text } });
+        }}>
+        <Text style = {styles.buttonText}>Submit</Text>
       </Pressable>
     </View>
   );
