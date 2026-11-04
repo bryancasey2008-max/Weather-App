@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Pressable, Text, TextInput, View } from "react-native";
 import { styles } from "@/styles";
-import { showWeather } from "@/weather";
+import { getWeather } from "@/weather";
 import { router } from "expo-router";
 
 
@@ -18,8 +18,8 @@ export default function Index() {
       />
 
       <Pressable style={styles.button} onPress={() => {
-        showWeather(text); 
-        router.push({ pathname: "/weatherInfo" as any, params: { city: text } });
+        getWeather(text); 
+        router.push({ pathname: "/weatherInfoScreen" as any, params: { city: text } });
         }}>
         <Text style = {styles.buttonText}>Submit</Text>
       </Pressable>

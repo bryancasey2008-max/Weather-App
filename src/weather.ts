@@ -12,46 +12,39 @@ interface WeatherData {
   }[];
 }
 
-const api = process.env.EXPO_PUBLIC_WEATHER_KEY;
-
-export async function showWeather(city: string){
-  if(city){
-    try{
-      const weatherData = await getWeather(city);
-      displayWeather(weatherData);
-    }
-    catch(error){
-      alert("City not found");
-      return;
-    }
-  }
-  else{
-    alert("Please enter in a city");
-    return;
-  }
+export interface WeatherInfo {
+  city: string;
+  tempF: number;
+  humidity: number;
+  description: string;
+  id: number;
+  weatherEmoji: string;
 }
 
-async function getWeather(city: string){
+const api = process.env.EXPO_PUBLIC_WEATHER_KEY;
+
+export async function getWeather(city: string): Promise<WeatherInfo>{
+  if(!city.trim()){
+    alert("Please enter in a city");
+  }
+
   const apiUrl = "https://api.openweathermap.org/data/2.5/weather?q=" + city + "&appid=" + api;
   const response = await fetch(apiUrl);
-  console.log(response);
 
   if (!response.ok){
     throw new Error("Failed to fetch weather data");
   }
 
-  return await response.json() as WeatherData;
-}
+  const data = await response.json() as WeatherData;
 
-function displayWeather(data: WeatherData){
-  const {
-    name: city, 
-    main: {temp, humidity}, 
-    weather: [{description, id}],
-  } = data;
-
-  alert("City:" + city + ", Temp: " + convertoFahrenheit(temp) + "°F, Humidity: " + humidity + ", Description: " + description + ",  Id: " + id);
-
+    return {
+    city: data.name,
+    tempF: convertoFahrenheit(data.main.temp),
+    humidity: data.main.humidity,
+    description: data.weather[0].description,
+    id: data.weather[0].id,
+    weatherEmoji:  getWeatherEmoji(data.weather[0].id)
+  };
 }
 
 function convertKelvinToCelcius(temperatureK: number){
@@ -61,4 +54,25 @@ function convertKelvinToCelcius(temperatureK: number){
 function convertoFahrenheit(temperatureK: number){
   let temperatureC = convertKelvinToCelcius(temperatureK);
   return Math.round(temperatureC * (9 / 5) + 32); 
+}
+
+function getWeatherEmoji(id: number){
+  switch(true){
+    case (id >= 200 && id < 300):
+      return "⛈️";
+    case (id >= 300 && id < 400):
+      return "🌧️";
+    case (id >= 500 && id < 600):
+      return "🌧️";
+    case (id >= 600 && id < 700):
+      return "❄️";
+    case (id >= 700 && id < 800):
+      return "🌫️";
+    case (id === 800):
+      return "☀️";
+    case (id >= 801 && id < 810):
+      return "☁️";
+    default:
+      return "?"
+  }
 }

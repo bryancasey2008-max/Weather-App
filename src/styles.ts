@@ -29,5 +29,32 @@ export const styles = StyleSheet.create({
     fontSize: 20,
     color: "white",
     fontWeight: "bold",
+  },
+  weatherInfo: {
+    margin: 50,
+    marginTop: 100,
+  },
+  city:{
+    fontSize: 50,
+    textAlign: "center",
+    fontWeight: "bold",
+    marginBottom: 15
+  },
+
+  temperature: {
+    fontSize: 45,
+    textAlign: "center",
+    marginBottom: 15
+  },
+
+  desc: {
+    fontSize: 25,
+    textAlign: "center",
+  },
+
+  humidity: {
+    fontSize: 15,
+    textAlign: "center",
+    marginBottom: 20
   }
 });
