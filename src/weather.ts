@@ -2,6 +2,8 @@ interface WeatherData {
   name: string;
   main: {
     temp: number;
+    temp_min: number;
+    temp_max: number;
     humidity: number;
   };
   weather: {
@@ -15,6 +17,8 @@ interface WeatherData {
 export interface WeatherInfo {
   city: string;
   tempF: number;
+  highF: number;
+  lowF: number;
   humidity: number;
   description: string;
   id: number;
@@ -40,6 +44,8 @@ export async function getWeather(city: string): Promise<WeatherInfo>{
     return {
     city: data.name,
     tempF: convertoFahrenheit(data.main.temp),
+    highF: convertoFahrenheit(data.main.temp_max),
+    lowF: convertoFahrenheit(data.main.temp_min),
     humidity: data.main.humidity,
     description: data.weather[0].description,
     id: data.weather[0].id,

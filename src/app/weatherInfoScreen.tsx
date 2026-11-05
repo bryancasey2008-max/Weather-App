@@ -23,6 +23,7 @@ export default function WeatherInfoScreen() {
     <View style = {styles.weatherInfo}>
       <Text style = {styles.city}>{weather.city}</Text>
       <Text style = {styles.temperature}>{weather.tempF}°F {weather.weatherEmoji}</Text>
+      <Text>H: {weather.highF}° L: {weather.lowF}°</Text>
       <Text style = {styles.humidity}>Humidity: {weather.humidity}</Text>
       <Text style = {styles.desc}>{weather.description}</Text>
     </View>
