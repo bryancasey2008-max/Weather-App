@@ -25,6 +25,35 @@ export interface WeatherInfo {
   weatherEmoji: string;
 }
 
+interface ForecastItem {
+  dt: number;
+  main: {
+    temp: number;
+    temp_min: number;
+    temp_max: number;
+    humidity: number;
+  };
+  weather: {
+    id: number;
+    main: string;
+    description: string;
+    icon: string;
+  }[];
+}
+
+interface ForecastData {
+  city: { name: string; timezone: number };
+  list: ForecastItem[];
+}
+
+export interface DailyForecast {
+  day: string;
+  highF: number;
+  lowF: number;
+  description: string;
+  weatherEmoji: string;
+}
+
 const api = process.env.EXPO_PUBLIC_WEATHER_KEY;
 
 export async function getWeather(city: string): Promise<WeatherInfo>{
@@ -53,13 +82,54 @@ export async function getWeather(city: string): Promise<WeatherInfo>{
   };
 }
 
-function convertKelvinToCelcius(temperatureK: number){
+export async function getForecast(city: string): Promise<DailyForecast[]>{
+  if(!city.trim()) throw new Error ("Please enter in a city");
+
+  const apiUrl = `https://api.openweathermap.org/data/2.5/forecast?q=${encodeURIComponent(city)}&appid=${api}`;
+  const response = await fetch(apiUrl);
+
+  if (!response.ok)throw new Error("Failed to fetch weather data");
+
+  const data = await response.json() as ForecastData;
+  const tz = data.city.timezone;
+
+  const days = new Map<string, ForecastItem[]>();
+
+  for(const item of data.list){
+    const key = new Date((item.dt + tz) * 1000).toISOString().slice(0, 10);
+    days.set(key, [...(days.get(key) ?? []), item]);
+  }
+
+  return [...days.entries()].slice(0, 6).map(([key, items]) => {
+    const midday = items.reduce((best, cur) => {
+      const hr = (i: ForecastItem) => new Date((i.dt + tz) * 1000).getUTCHours();
+      return Math.abs(hr(cur) - 12) < Math.abs(hr(best) - 12) ? cur : best;
+    });
+
+    return {
+      day: new Date(key + "T00:00:00Z").toLocaleDateString("en-US", {
+        weekday: "short",
+        timeZone: "UTC",
+      }),
+      highF: convertoFahrenheit(Math.max(...items.map(i => i.main.temp_max))),
+      lowF: convertoFahrenheit(Math.min(...items.map(i => i.main.temp_min))),
+      description: midday.weather[0].description,
+      weatherEmoji: getWeatherEmoji(midday.weather[0].id),
+    };
+  });
+}
+
+export function convertKelvinToCelcius(temperatureK: number){
   return temperatureK - 273;
 }
 
-function convertoFahrenheit(temperatureK: number){
+ function convertoFahrenheit(temperatureK: number){
   let temperatureC = convertKelvinToCelcius(temperatureK);
   return Math.round(temperatureC * (9 / 5) + 32); 
+}
+
+export function convertToCelsius(temperatureF: number){
+  return Math.round(((temperatureF - 32) * 5) / 9);
 }
 
 function getWeatherEmoji(id: number){
