@@ -2,7 +2,7 @@ import { StyleSheet } from "react-native";
 
 export const styles = StyleSheet.create({
   input: {
-    width: 200,
+    width: 300,
     height: 50,
     borderRadius: 8,
     borderColor: '#ccc',
@@ -11,20 +11,19 @@ export const styles = StyleSheet.create({
     marginBottom: 12,
     fontSize: 25
   },
+
+  searchResults: {
+    width: 300, 
+    backgroundColor: "#fff", 
+    borderRadius: 10
+  },
   
   container: {
     fontFamily: "Avenir Next",
     flex: 1,
     alignItems: "center",
-    justifyContent: "center",
-  },
-
-  button: {
-    backgroundColor: "#2e5eff",
-    width: 150,
-    padding: 10,
-    borderRadius: 5,
-    boxShadow: "2px 2px 8px #215999"
+    marginTop: 50,
+    backgroundColor: "hsl(140, 20%, 96%)"
   },
 
   buttonText: {
@@ -80,7 +79,7 @@ export const styles = StyleSheet.create({
     padding: 5
   },
 
-  forecastEmoji:{
+  forecastIcon:{
     fontSize: 30,
     marginLeft: 10
   },
@@ -115,5 +114,18 @@ export const styles = StyleSheet.create({
     borderRadius: 15,
     borderColor: "black",
     borderWidth: 2
+  },
+
+  homeButton: {
+    position: "absolute",
+    backgroundColor: "#2e5eff",
+    width: 50,
+    height: 50,
+    top: 50,
+    left: 16,
+    justifyContent: "center",
+    alignItems: "center",
+    borderRadius: 20,
+    boxShadow: "2px 2px 8px #215999",
   }
 });

@@ -1,3 +1,5 @@
+import { ImageSourcePropType } from "react-native";
+
 interface WeatherData {
   name: string;
   main: {
@@ -12,6 +14,10 @@ interface WeatherData {
     description: string;
     icon: string;
   }[];
+  wind: {
+    speed: number;
+  };
+  coord: { lat: number; lon: number };
 }
 
 export interface WeatherInfo {
@@ -22,7 +28,10 @@ export interface WeatherInfo {
   humidity: number;
   description: string;
   id: number;
-  weatherEmoji: string;
+  weatherIcon: ImageSourcePropType;
+  windMph: number;
+  lat: number,
+  lon: number
 }
 
 interface ForecastItem {
@@ -51,22 +60,61 @@ export interface DailyForecast {
   highF: number;
   lowF: number;
   description: string;
-  weatherEmoji: string;
+  weatherIcon: ImageSourcePropType;
+}
+
+export interface Place {
+  name: string;
+  state?: string;
+  country: string;
+  lat: number;
+  lon: number;
+}
+
+export interface LocationInfo {
+  state: string,
+  country: string
+}
+
+export async function getLocationInfo(lat: number, lon: number): Promise<LocationInfo>{
+  try{
+    const url = `https://geo.fcc.gov/api/census/area?lat=${lat}&lon=${lon}&format=json`;
+    const response = await fetch(url);
+    if(!response.ok) return { state: "", country: "" };
+
+    const data = await response.json();
+    const result = data.results?.[0];
+    return {
+      state: result?.state_name ?? "",
+      country: result?.country_name ?? "",
+    };
+  }
+  catch{
+    return { state: "", country: "" };
+  }
+
+}
+
+export async function searchPlaces(query: string): Promise<Place[]> {
+  const url =
+    `https://api.openweathermap.org/geo/1.0/direct?q=${encodeURIComponent(query)}&limit=5&appid=${api}`;
+  const response = await fetch(url);
+  if (!response.ok) throw new Error("Failed to search places");
+  return (await response.json()) as Place[];
 }
 
 const api = process.env.EXPO_PUBLIC_WEATHER_KEY;
 
-export async function getWeather(city: string): Promise<WeatherInfo>{
-  if(!city.trim()){
-    alert("Please enter in a city");
-  }
+export async function getWeather(city: string, lat?: string, lon?: string): Promise<WeatherInfo>{
+  if(!city.trim()) throw new Error ("Please enter in a city");
 
-  const apiUrl = "https://api.openweathermap.org/data/2.5/weather?q=" + city + "&appid=" + api;
+  const where = lat && lon
+    ? `lat=${lat}&lon=${lon}`
+    : `q=${encodeURIComponent(city)}`;
+  const apiUrl = `https://api.openweathermap.org/data/2.5/weather?${where}&appid=${api}`;
   const response = await fetch(apiUrl);
 
-  if (!response.ok){
-    throw new Error("Failed to fetch weather data");
-  }
+  if (!response.ok)throw new Error("Failed to fetch weather data");
 
   const data = await response.json() as WeatherData;
 
@@ -78,14 +126,20 @@ export async function getWeather(city: string): Promise<WeatherInfo>{
     humidity: data.main.humidity,
     description: data.weather[0].description,
     id: data.weather[0].id,
-    weatherEmoji:  getWeatherEmoji(data.weather[0].id)
+    weatherIcon:  getWeatherIcon(data.weather[0].id),
+    windMph: convertToMph(data.wind.speed),
+    lat: data.coord.lat,
+    lon: data.coord.lon
   };
 }
 
-export async function getForecast(city: string): Promise<DailyForecast[]>{
+export async function getForecast(city: string, lat?: string, lon?: string): Promise<DailyForecast[]>{
   if(!city.trim()) throw new Error ("Please enter in a city");
 
-  const apiUrl = `https://api.openweathermap.org/data/2.5/forecast?q=${encodeURIComponent(city)}&appid=${api}`;
+    const where = lat && lon
+    ? `lat=${lat}&lon=${lon}`
+    : `q=${encodeURIComponent(city)}`;
+  const apiUrl = `https://api.openweathermap.org/data/2.5/forecast?${where}&appid=${api}`;
   const response = await fetch(apiUrl);
 
   if (!response.ok)throw new Error("Failed to fetch weather data");
@@ -114,7 +168,7 @@ export async function getForecast(city: string): Promise<DailyForecast[]>{
       highF: convertoFahrenheit(Math.max(...items.map(i => i.main.temp_max))),
       lowF: convertoFahrenheit(Math.min(...items.map(i => i.main.temp_min))),
       description: midday.weather[0].description,
-      weatherEmoji: getWeatherEmoji(midday.weather[0].id),
+      weatherIcon: getWeatherIcon(midday.weather[0].id),
     };
   });
 }
@@ -132,23 +186,37 @@ export function convertToCelsius(temperatureF: number){
   return Math.round(((temperatureF - 32) * 5) / 9);
 }
 
-function getWeatherEmoji(id: number){
+export function convertToMph(ms: number) {
+  return Math.round(ms * 2.23694);
+}
+
+function getWeatherIcon(id: number){
   switch(true){
-    case (id >= 200 && id < 300):
-      return "⛈️";
-    case (id >= 300 && id < 400):
-      return "🌧️";
-    case (id >= 500 && id < 600):
-      return "🌧️";
-    case (id >= 600 && id < 700):
-      return "❄️";
-    case (id >= 700 && id < 800):
-      return "🌫️";
+    case (id >= 200 && id <= 232):
+      return require("@/assets/images/WeatherIcons/11d_t.png");
+    case (id >= 300 && id <= 321):
+      return require("@/assets/images/WeatherIcons/09d_t.png");
+    case (id >= 500 && id <= 504):
+      return require("@/assets/images/WeatherIcons/10d_t.png");
+    case (id === 511):
+      return require("@/assets/images/WeatherIcons/13d_t.png");
+    case (id >= 520 && id <= 531):
+      return require("@/assets/images/WeatherIcons/09d_t.png");
+    case (id >= 600 && id <= 622):
+      return require("@/assets/images/WeatherIcons/13d_t.png");
+    case (id >= 701 && id < 781):
+      return require("@/assets/images/WeatherIcons/50d_t.png");
     case (id === 800):
-      return "☀️";
-    case (id >= 801 && id < 810):
-      return "☁️";
+      return require("@/assets/images/WeatherIcons/01d_t.png");
+    case (id === 801):
+      return require("@/assets/images/WeatherIcons/02d_t.png");
+    case (id === 802):
+      return require("@/assets/images/WeatherIcons/03d_t.png");
+    case (id === 803):
+      return require("@/assets/images/WeatherIcons/04d_t.png");
+    case (id === 804):
+      return require("@/assets/images/WeatherIcons/04d_t.png");
     default:
-      return "?"
+      return require("@/assets/images/WeatherIcons/01d_t.png");
   }
 }
