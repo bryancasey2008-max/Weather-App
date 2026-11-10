@@ -1,13 +1,12 @@
-import { useLocalSearchParams } from "expo-router";
-import { useEffect, useState } from "react";
-import { ActivityIndicator, FlatList, Text, View, Image, TouchableOpacity } from "react-native";
+import { saveCity } from "@/savedCities";
 import { useStyles } from "@/styles";
-import { getForecast, DailyForecast, WeatherInfo, getWeather, convertToCelsius, getLocationInfo, LocationInfo } from "@/weather";
-import { Dropdown } from 'react-native-element-dropdown';
-import { AntDesign } from '@expo/vector-icons'; 
-import { router } from "expo-router";
-import { saveCity } from "@/db";
 import { useTheme } from "@/themes";
+import { convertToCelsius, DailyForecast, getForecast, getLocationInfo, getWeather, LocationInfo, WeatherInfo } from "@/weather";
+import { AntDesign, MaterialCommunityIcons } from '@expo/vector-icons';
+import { router, useLocalSearchParams } from "expo-router";
+import { useEffect, useState } from "react";
+import { ActivityIndicator, Appearance, FlatList, Image, Text, TouchableOpacity, useColorScheme, View } from "react-native";
+import { Dropdown } from 'react-native-element-dropdown';
 
 type Unit = "F" | "C";
 
@@ -19,6 +18,7 @@ const unitOptions: {label: string, value: Unit}[] = [
 export default function WeatherInfoScreen() {
   const theme = useTheme(); // inside the component, with your other hooks
   const styles = useStyles();
+  const scheme = useColorScheme();
   const { city, state, country, lat, lon } = useLocalSearchParams<{
     city: string;
     state?: string;
@@ -112,7 +112,7 @@ export default function WeatherInfoScreen() {
 
     <TouchableOpacity style={styles.homeButton} onPress={() => {
       router.push({ pathname: "/" as any });}}>
-      <AntDesign name="home" size={18} color="#fff" />
+      <AntDesign name="home" size={30} color="#fff" />
     </TouchableOpacity>
 
     <TouchableOpacity style={styles.saveButton}
@@ -126,8 +126,19 @@ export default function WeatherInfoScreen() {
     })
   }
 >
-  <AntDesign name="star" size={40} color="#fff" />
+  <AntDesign name="star" size={30} color="#fff" />
 </TouchableOpacity>
+
+      <TouchableOpacity
+        style={styles.themeButton}
+        onPress={() => Appearance.setColorScheme(scheme === "dark" ? "light" : "dark")}
+      >
+        <MaterialCommunityIcons
+          name={scheme === "dark" ? "weather-sunny" : "weather-night"}
+          size={30}
+          color={"white"}
+        />
+      </TouchableOpacity>
   </View>
   );
 }

@@ -8,6 +8,14 @@ export function useStyles() {
   return useMemo(
     () =>
       StyleSheet.create({
+        title: {
+          fontSize: 40,
+          top: 20,
+          fontWeight: "bold",
+          marginBottom: 80,
+          textAlign: "center",
+          color: theme.text,
+        },
         input: {
           width: 300,
           height: 50,
@@ -15,10 +23,21 @@ export function useStyles() {
           borderColor: theme.border,
           borderWidth: 1,
           paddingHorizontal: 12,
-          marginBottom: 12,
           fontSize: 25,
           color: theme.text,
           backgroundColor: theme.surface,
+        },
+
+        themeButton: {
+          position: "absolute",
+          backgroundColor: "#2f2344",
+          width: 50,
+          height: 50,
+          bottom: 20,
+          left: 20,
+          justifyContent: "center",
+          alignItems: "center",
+          borderRadius: 20,
         },
 
         searchResults: {
