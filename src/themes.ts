@@ -1,5 +1,6 @@
 import { useColorScheme } from "react-native";
 
+// Define the light and dark theme color palettes
 const light = {
   background: "hsl(140, 20%, 96%)",
   text: "#111111",
@@ -12,6 +13,7 @@ const light = {
   placeholder: "#888888",
 };
 
+// Define the dark theme color palette
 const dark = {
   background: "#121212",
   text: "#f5f5f5",
@@ -24,8 +26,9 @@ const dark = {
   placeholder: "#888888",
 };
 
-export type Theme = typeof light;
+export type Theme = typeof light; // Define the Theme type based on the light theme structure
 
+// Custom hook to get the current theme based on the device's color scheme
 export function useTheme(): Theme {
   return useColorScheme() === "dark" ? dark : light;
 }

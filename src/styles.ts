@@ -3,11 +3,12 @@ import { useMemo } from "react";
 import { useTheme } from "@/themes";
 
 export function useStyles() {
-  const theme = useTheme();
+  const theme = useTheme(); // Get the current theme using the custom hook
 
   return useMemo(
     () =>
       StyleSheet.create({
+        // Define styles for various components in the app, using the current theme colors
         title: {
           fontSize: 40,
           top: 20,
@@ -16,6 +17,7 @@ export function useStyles() {
           textAlign: "center",
           color: theme.text,
         },
+
         input: {
           width: 300,
           height: 50,
@@ -45,7 +47,7 @@ export function useStyles() {
           backgroundColor: theme.surface,
           borderRadius: 10,
         },
-
+        
         container: {
           fontFamily: "Avenir Next",
           flex: 1,
