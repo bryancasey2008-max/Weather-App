@@ -1,11 +1,13 @@
 import { useLocalSearchParams } from "expo-router";
 import { useEffect, useState } from "react";
 import { ActivityIndicator, FlatList, Text, View, Image, TouchableOpacity } from "react-native";
-import { styles } from "@/styles";
+import { useStyles } from "@/styles";
 import { getForecast, DailyForecast, WeatherInfo, getWeather, convertToCelsius, getLocationInfo, LocationInfo } from "@/weather";
 import { Dropdown } from 'react-native-element-dropdown';
 import { AntDesign } from '@expo/vector-icons'; 
 import { router } from "expo-router";
+import { saveCity } from "@/db";
+import { useTheme } from "@/themes";
 
 type Unit = "F" | "C";
 
@@ -15,6 +17,8 @@ const unitOptions: {label: string, value: Unit}[] = [
 ];
 
 export default function WeatherInfoScreen() {
+  const theme = useTheme(); // inside the component, with your other hooks
+  const styles = useStyles();
   const { city, state, country, lat, lon } = useLocalSearchParams<{
     city: string;
     state?: string;
@@ -62,7 +66,7 @@ export default function WeatherInfoScreen() {
   if (error || !weather) return <Text>{error}</Text>;
 
   return (
-    <View style = {{flex: 1}}>
+    <View style = {styles.container}>
     <FlatList
       data={forecast}
       keyExtractor={(d) => d.day}
@@ -80,6 +84,15 @@ export default function WeatherInfoScreen() {
             valueField="value"
             value={unit}
             onChange={(option) => setUnit(option.value)}
+
+            selectedTextStyle={{ color: theme.text }}        // the chosen value shown in the closed box
+            placeholderStyle={{ color: theme.placeholder }}  // text shown when nothing is selected
+            itemTextStyle={{ color: theme.text }}            // each option in the open menu
+            containerStyle={{                                // the open menu's box
+              backgroundColor: theme.surface,
+              borderColor: theme.border,
+            }}
+            activeColor={theme.divider}                      // highlight behind the selected option
           />
         </View>
       }
@@ -101,6 +114,20 @@ export default function WeatherInfoScreen() {
       router.push({ pathname: "/" as any });}}>
       <AntDesign name="home" size={18} color="#fff" />
     </TouchableOpacity>
+
+    <TouchableOpacity style={styles.saveButton}
+  onPress={() =>
+    saveCity({
+      name: city,
+      state,
+      country: country ?? location?.country ?? "",
+      lat: Number(lat),
+      lon: Number(lon),
+    })
+  }
+>
+  <AntDesign name="star" size={40} color="#fff" />
+</TouchableOpacity>
   </View>
   );
 }

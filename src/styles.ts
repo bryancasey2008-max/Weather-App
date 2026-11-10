@@ -1,131 +1,184 @@
 import { StyleSheet } from "react-native";
+import { useMemo } from "react";
+import { useTheme } from "@/themes";
 
-export const styles = StyleSheet.create({
-  input: {
-    width: 300,
-    height: 50,
-    borderRadius: 8,
-    borderColor: '#ccc',
-    borderWidth: 1,
-    paddingHorizontal: 12,
-    marginBottom: 12,
-    fontSize: 25
-  },
+export function useStyles() {
+  const theme = useTheme();
 
-  searchResults: {
-    width: 300, 
-    backgroundColor: "#fff", 
-    borderRadius: 10
-  },
-  
-  container: {
-    fontFamily: "Avenir Next",
-    flex: 1,
-    alignItems: "center",
-    marginTop: 50,
-    backgroundColor: "hsl(140, 20%, 96%)"
-  },
+  return useMemo(
+    () =>
+      StyleSheet.create({
+        input: {
+          width: 300,
+          height: 50,
+          borderRadius: 8,
+          borderColor: theme.border,
+          borderWidth: 1,
+          paddingHorizontal: 12,
+          marginBottom: 12,
+          fontSize: 25,
+          color: theme.text,
+          backgroundColor: theme.surface,
+        },
 
-  buttonText: {
-    textAlign:"center",
-    fontSize: 20,
-    color: "white",
-    fontWeight: "bold",
-  },
+        searchResults: {
+          width: 300,
+          backgroundColor: theme.surface,
+          borderRadius: 10,
+        },
 
-  weatherInfo: {
-    margin: 50,
-    marginTop: 100,
-  },
+        container: {
+          fontFamily: "Avenir Next",
+          flex: 1,
+          marginTop: 50,
+          backgroundColor: theme.background,
+        },
 
-  city:{
-    fontSize: 30,
-    textAlign: "center",
-    fontWeight: "bold",
-    marginBottom: 15
-  },
+        buttonText: {
+          textAlign: "center",
+          fontSize: 20,
+          color: "white",
+          fontWeight: "bold",
+        },
 
-  temperature: {
-    fontSize: 45,
-    textAlign: "center",
-    marginBottom: 15
-  },
+        sectionTitle: {
+          fontSize: 20,
+          fontWeight: "bold",
+          marginTop: 20,
+          marginBottom: 10,
+          textAlign: "center",
+          color: theme.text,
+        },
 
-  desc: {
-    fontSize: 25,
-    textAlign: "center",
-  },
+        savedResults: {
+          fontSize: 20,
+          padding: 12,
+          width: 300,
+          flexDirection: "row",
+          justifyContent: "space-between",
+          borderBottomWidth: 1,
+          borderBottomColor: theme.divider,
+          color: theme.text,
+        },
 
-  humidity: {
-    fontSize: 15,
-    textAlign: "center",
-  },
+        weatherInfo: {
+          margin: 50,
+          marginTop: 100,
+        },
 
-  forecast: {
-    flexDirection: "row",
-    margin: "auto",
-    justifyContent: "center",
-    padding: 12,
-    width: 300,
-    backgroundColor: "#2e5eff",
-    borderBottomWidth: 2,
-    borderBottomColor: "rgba(255,255,255,0.5)",
-  },
+        city: {
+          fontSize: 30,
+          textAlign: "center",
+          fontWeight: "bold",
+          marginBottom: 15,
+          color: theme.text,
+        },
 
-  forecastText: {
-    color: "white",
-    fontSize: 20,
-    fontWeight: "bold",
-    padding: 5
-  },
+        temperature: {
+          fontSize: 45,
+          textAlign: "center",
+          marginBottom: 15,
+          color: theme.text,
+        },
 
-  forecastIcon:{
-    fontSize: 30,
-    marginLeft: 10
-  },
+        desc: {
+          fontSize: 25,
+          textAlign: "center",
+          color: theme.text,
+        },
 
-  forecastTemp: {
-    color: "white",
-    fontSize: 20,
-    marginLeft: 80,
-    fontWeight: "bold",
-    padding: 5
-  },
+        humidity: {
+          fontSize: 15,
+          textAlign: "center",
+          color: theme.mutedText,
+        },
 
-  forecastFirst: {
-    paddingTop: 20,
-    borderTopLeftRadius: 10,
-    borderTopRightRadius: 10,
-  },
+        forecast: {
+          flexDirection: "row",
+          margin: "auto",
+          justifyContent: "center",
+          padding: 12,
+          width: 300,
+          backgroundColor: theme.forecast,
+          borderBottomWidth: 2,
+          borderBottomColor: "rgba(255,255,255,0.5)",
+        },
 
-  forecastLast: {
-    paddingBottom: 20,
-    borderBottomLeftRadius: 10,
-    borderBottomRightRadius: 10,
-    borderBottomWidth: 0,
-    boxShadow: "2px 2px 8px #215999"
-  },
+        forecastText: {
+          color: "white",
+          fontSize: 20,
+          fontWeight: "bold",
+          padding: 5,
+        },
 
-  dropdown: {
-    marginTop: 20,
-    width: 180,
-    height: 40,
-    paddingHorizontal: 12,
-    borderRadius: 15,
-    borderColor: "black",
-    borderWidth: 2
-  },
+        forecastIcon: {
+          fontSize: 30,
+          marginLeft: 10,
+        },
 
-  homeButton: {
-    position: "absolute",
-    backgroundColor: "#2e5eff",
-    width: 50,
-    height: 50,
-    top: 50,
-    left: 16,
-    justifyContent: "center",
-    alignItems: "center",
-    borderRadius: 20,
-    boxShadow: "2px 2px 8px #215999",
-  }
-});
+        forecastTemp: {
+          color: "white",
+          fontSize: 20,
+          marginLeft: 80,
+          fontWeight: "bold",
+          padding: 5,
+        },
+
+        forecastFirst: {
+          paddingTop: 20,
+          borderTopLeftRadius: 10,
+          borderTopRightRadius: 10,
+        },
+
+        forecastLast: {
+          paddingBottom: 20,
+          borderBottomLeftRadius: 10,
+          borderBottomRightRadius: 10,
+          borderBottomWidth: 0,
+          boxShadow: `2px 2px 8px ${theme.shadow}`,
+        },
+
+        dropdown: {
+          marginTop: 20,
+          width: 180,
+          height: 40,
+          paddingHorizontal: 12,
+          borderRadius: 15,
+          borderColor: theme.text,
+          borderWidth: 2,
+        },
+
+        dropdownText: {
+          color: theme.text,
+          fontSize: 20,
+        },
+
+        homeButton: {
+          position: "absolute",
+          backgroundColor: "#2e5eff",
+          width: 50,
+          height: 50,
+          top: 50,
+          left: 16,
+          justifyContent: "center",
+          alignItems: "center",
+          borderRadius: 20,
+          boxShadow: `2px 2px 8px ${theme.shadow}`,
+        },
+
+        saveButton: {
+          position: "absolute",
+          backgroundColor: "#81569e",
+          width: 50,
+          height: 50,
+          top: 50,
+          left: 80,
+          justifyContent: "center",
+          alignItems: "center",
+          borderRadius: 20,
+          boxShadow: `2px 2px 8px ${theme.shadow}`,
+        },
+      }),
+    [theme]
+  );
+}
