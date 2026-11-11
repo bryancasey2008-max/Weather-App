@@ -8,6 +8,6 @@ An app using react Native that allows you to look at the weather and 5-day forec
    - Light/Dark mode
 
 # Screenshots
-![image alt](https://github.com/bryancasey2008-max/Assignment-Manager/blob/e90646e4f72d7ba349eaa888880824e88e090030/Screenshot%202026-10-26%20202823.png)
-![image alt](https://github.com/bryancasey2008-max/Assignment-Manager/blob/e90646e4f72d7ba349eaa888880824e88e090030/Screenshot%202026-10-26%20202823.png)
-![image alt](https://github.com/bryancasey2008-max/Assignment-Manager/blob/e90646e4f72d7ba349eaa888880824e88e090030/Screenshot%202026-10-26%20202823.png)
+![image alt](https://github.com/bryancasey2008-max/Weather-App/blob/f2a7bbf28ffa62a2ba25dbd6f55c9234dc590b59/IMG_1589.PNG)
+![image alt](https://github.com/bryancasey2008-max/Weather-App/blob/f2a7bbf28ffa62a2ba25dbd6f55c9234dc590b59/IMG_1591.PNG)
+![image alt](https://github.com/bryancasey2008-max/Weather-App/blob/f2a7bbf28ffa62a2ba25dbd6f55c9234dc590b59/Screenshot%202026-11-10%20192252.png)
