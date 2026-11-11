@@ -9,10 +9,18 @@ An app using react Native that allows you to look at the weather and 5-day forec
 
 ## Technologies Used
 
-    - React Native
-    - TypeScript
-	- Weather API
-	- SQLite
+- React Native
+- TypeScript
+- Weather API
+- SQLite
+
+## What I Learned
+
+- Working with APIs
+- Managing application state
+- Creating mobile interfaces
+- Switching themes with React Native
+
 
 
 # Screenshots
