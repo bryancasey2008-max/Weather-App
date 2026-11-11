@@ -73,10 +73,10 @@ export default function Index() {
             onChangeText={setText}
           />
         </View>
-        // Display the list of suggested places based on user input, if any suggestions are available
+        {/* Display the list of suggested places based on user input, if any suggestions are available */}
         {suggestions.length > 0 && (
           <View style={styles.searchResults}>
-            // Map through the suggestions and render each one as a touchable item that navigates to the weather information screen when pressed
+            {/* Map through the suggestions and render each one as a touchable item that navigates to the weather information screen when pressed */}
             {suggestions.map((p, i) => (
               <TouchableOpacity
                 key={`${p.lat},${p.lon}`}
@@ -93,7 +93,7 @@ export default function Index() {
           </View>
         )}
 
-        // Display the list of saved cities retrieved from the database, allowing users to navigate to their weather information or remove them from the list
+        {/* Display the list of saved cities retrieved from the database, allowing users to navigate to their weather information or remove them from the list */}
         <Text style={styles.sectionTitle}>Saved Cities</Text>
         {saved.map((c) => (
           <TouchableOpacity
@@ -114,7 +114,7 @@ export default function Index() {
             
           
           >
-            // Display the name, state, and country of the saved city, and provide a trash icon to remove it from the list
+            {/* Display the name, state, and country of the saved city, and provide a trash icon to remove it from the list */}
             <Text style={styles.dropdownText}>{[c.name, c.state, c.country].filter(Boolean).join(", ")}</Text>
             <MaterialCommunityIcons name="trash-can-outline" size={30}  color={theme.text}           
             onPress={async () => {
@@ -126,12 +126,12 @@ export default function Index() {
         ))}
       </ScrollView>
       
-      // Render a button to toggle between light and dark themes, using the current color scheme to determine the icon and action
+      {/* Render a button to toggle between light and dark themes, using the current color scheme to determine the icon and action */}
       <TouchableOpacity
         style={styles.themeButton}
         onPress={() => Appearance.setColorScheme(scheme === "dark" ? "light" : "dark")}
       >
-        // Display the appropriate icon based on the current color scheme, indicating the action to switch themes
+        {/* Display the appropriate icon based on the current color scheme, indicating the action to switch themes */}
         <MaterialCommunityIcons
           name={scheme === "dark" ? "weather-sunny" : "weather-night"}
           size={30}

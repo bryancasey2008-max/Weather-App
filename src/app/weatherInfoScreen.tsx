@@ -117,20 +117,21 @@ export default function WeatherInfoScreen() {
           index === forecast.length - 1 && styles.forecastLast,
       ]}
     >
-          <Text style = {styles.forecastText }>{[ index > 0 && item.day, index === 0 && "Today"]}</Text> // Display "Today" for the first item and the day of the week for subsequent items
+          {/* Display "Today" for the first item and the day of the week for subsequent items */}
+          <Text style = {styles.forecastText }>{[ index > 0 && item.day, index === 0 && "Today"]}</Text> 
           <Image source={item.weatherIcon} />
           <Text style = {styles.forecastTemp}>{showTemp(item.highF)}° / {showTemp(item.lowF)}°</Text>
         </View>
       )}
     />
 
-    // Render a button to navigate back to the home screen, using the router to push the root path ("/") when pressed
+    { /*Render a button to navigate back to the home screen, using the router to push the root path ("/") when pressed */}
     <TouchableOpacity style={styles.homeButton} onPress={() => {
       router.push({ pathname: "/" as any });}}>
       <AntDesign name="home" size={30} color="#fff" />
     </TouchableOpacity>
 
-    // Render a button to save the current city to the database, using the saveCity function and passing the necessary information (name, state, country, latitude, and longitude) when pressed
+    {/*Render a button to save the current city to the database, using the saveCity function and passing the necessary information (name, state, country, latitude, and longitude) when pressed */}
     <TouchableOpacity style={styles.saveButton}
     onPress={() =>
     saveCity({
@@ -145,7 +146,7 @@ export default function WeatherInfoScreen() {
       <AntDesign name="star" size={30} color="#fff" />
     </TouchableOpacity>
     
-    // Render a button to toggle between light and dark themes, using the current color scheme to determine the icon and action
+     {/* Render a button to toggle between light and dark themes, using the current color scheme to determine the icon and action */} 
     <TouchableOpacity
       style={styles.themeButton}
       onPress={() => Appearance.setColorScheme(scheme === "dark" ? "light" : "dark")}
